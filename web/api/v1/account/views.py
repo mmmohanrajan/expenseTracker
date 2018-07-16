@@ -1,22 +1,24 @@
 from rest_framework import status
+from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAdminUser
 
 from .serializers import UserSerializer
 from api.models import User
+from api.permissions import IsAdminOrOwner, IsAdmin
 
 
-class UserRegister(APIView):
+class UserListView(generics.ListAPIView):
+    serializer_class = UserSerializer
+    permission_classes = (IsAdmin,)
+    queryset = User.objects.all()
+
+
+class UserRegister(generics.CreateAPIView):
     """
     Register a new user.
     """
     serializer_class = UserSerializer
     permission_classes = (AllowAny,)
-
-    def post(self, request, format=None):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    

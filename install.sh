@@ -5,7 +5,7 @@ function install(){
     get_os
     # function_calling db_name user pwd
     create_database 'expense_tracker' 'admin' 'password123'
-    sync_tables
+    # sync_tables
 }
 
 function get_os(){
@@ -32,7 +32,7 @@ function install_dependencies(){
  echo "Installing python required packages ..."
  pip install pipenv
  pipenv install
- pipenv shell
+ # pipenv shell
  if [[ $? -ne 0 ]];then
     echo "python package installtion has failed please see file"
     FCOUNT=$((FCOUNT + 1))

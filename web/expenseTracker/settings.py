@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'api'
+    'drf_yasg',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -141,5 +142,5 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = 'api.User'
 JWT_AUTH = { 
     'JWT_AUTH_HEADER_PREFIX': 'Token',
-    'JWT_EXPIRATION_DELTA': timedelta(seconds=3000)
+    'JWT_EXPIRATION_DELTA': timedelta(seconds=2628000)
 }

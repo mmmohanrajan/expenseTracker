@@ -11,6 +11,7 @@ django = "*"
 djangorestframework = "*"
 "psycopg2" = "*"
 djangorestframework-jwt = "*"
+drf-yasg = "*"
 
 
 [dev-packages]

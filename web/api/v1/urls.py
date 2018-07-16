@@ -18,11 +18,33 @@ from django.urls import path
 
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 
-from api.v1.account.views import UserRegister
+from rest_framework.routers import SimpleRouter
+
+from api.v1.account.views import UserRegister, UserListView
+from api.v1.group.views import GroupViewSet, MemberListView, MemberDeleteView
+# from api.v1.group.views import GroupListView, GroupDetailView, MemberListView, MemberDeleteView
+from api.v1.activity.views import ActivityViewSet, AccountView
+
+router = SimpleRouter()
+router.register("group", GroupViewSet, base_name='group')
+router.register("activity", ActivityViewSet, base_name='activity')
+
 
 urlpatterns = [
     path('account/login/', obtain_jwt_token),
     path('account/token-refresh/', refresh_jwt_token),
     path('account/token-verify/', verify_jwt_token),
     path('account/register/', UserRegister.as_view()),
+
+    path('user/', UserListView.as_view()),
+
+    # path('group/', GroupListView.as_view()),
+    # path('group/<int:pk>/', GroupDetailView.as_view()),
+    
+    path('group/<int:gid>/member/', MemberListView.as_view()),
+    path('group/<int:gid>/member/<int:mid>/', MemberDeleteView.as_view()),
+    
+    path('account/', AccountView.as_view()),
 ]
+
+urlpatterns += router.urls
