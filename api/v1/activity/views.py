@@ -9,11 +9,11 @@ from rest_framework import serializers
 
 from django.db.models import Q
 
-from api.models import Group, User, Activity, Account
+from api.models import Group, User, Activity, Account, Comment
 from api.v1.account.serializers import UserSerializer
-from api.v1.activity.serializers import ActivitySerializer, AccountSerializer
+from api.v1.activity.serializers import ActivitySerializer, AccountSerializer, CommentSerializer
 from api.v1.group.serializers import GroupSerializer, MemberSerializer
-from api.permissions import IsOwnerOrReadOnly, IsGroupAccessable
+from api.permissions import IsOwnerOrReadOnly, IsGroupAccessable, IsActivityAccessible
 
 
 class ActivityViewSet(viewsets.ModelViewSet):
@@ -96,6 +96,43 @@ class ActivityViewSet(viewsets.ModelViewSet):
         if not kwargs.get('dont_delete'):
             instance.delete()
 
+
+class CommentListView(generics.ListCreateAPIView):
+    '''
+    '''
+    serializer_class = CommentSerializer
+    permission_classes = (IsActivityAccessible,)
+
+    def get_queryset(self, aid=None):
+        return Comment.objects.filter(activity=aid)
+
+    def list(self, request, aid):
+        serializer = self.get_serializer(self.get_queryset(aid), many=True)
+        return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        aid = self.kwargs.get('aid')
+        activity = Activity.objects.get(pk=aid)
+        serializer.save(activity=activity)
+
+
+class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    '''
+    '''
+    serializer_class = CommentSerializer
+    queryset = Comment.objects.all()
+    permission_classes = (IsActivityAccessible, IsOwnerOrReadOnly)
+
+    # def get_queryset(self, cid=None):
+    #     return Comment.objects.filter(pk=cid).first()
+
+    # def retrieve(self, request, **kwargs):
+    #     comment = self.get_queryset(kwargs.get('cid'))
+    #     if comment:
+    #         serializer = self.get_serializer(comment)
+    #         return Response(serializer.data)
+    #     return Response(dict(detail='Not found.'), status=status.HTTP_404_NOT_FOUND)
+     
 
 class AccountView(generics.ListAPIView):
     '''

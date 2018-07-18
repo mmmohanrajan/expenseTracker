@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import Group, User, Activity, Account
+from api.models import Group, User, Activity, Account, Comment
 from api.v1.account.serializers import UserSerializer
 
 
@@ -11,6 +11,18 @@ class ActivitySerializer(serializers.ModelSerializer):
                         'created_by': {'default': serializers.CurrentUserDefault()},
                         'owner': {'default': serializers.CurrentUserDefault()}
                     }
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    '''
+    '''
+    class Meta:
+        model = Comment
+        fields = '__all__'
+        extra_kwargs = {
+                'created_by': {'default': serializers.CurrentUserDefault()},
+            }
+
 
 class AccountSerializer(serializers.ModelSerializer):
     '''

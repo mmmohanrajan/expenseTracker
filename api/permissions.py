@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from api.models import Group
+from api.models import Group, Activity
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -34,3 +34,11 @@ class IsGroupAccessable(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS and not gid:
             return True
         return Group.objects.filter(id=gid, users__in=[request.user]).first()
+
+
+class IsActivityAccessible(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        aid = view.kwargs.get('aid')
+        activity = Activity.objects.filter(id=aid).first()
+        return request.user in activity.gid.users.all()

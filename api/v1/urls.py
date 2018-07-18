@@ -23,7 +23,7 @@ from rest_framework.routers import SimpleRouter
 from api.v1.account.views import UserRegister, UserListView
 from api.v1.group.views import GroupViewSet, MemberListView, MemberDeleteView
 # from api.v1.group.views import GroupListView, GroupDetailView, MemberListView, MemberDeleteView
-from api.v1.activity.views import ActivityViewSet, AccountView
+from api.v1.activity.views import ActivityViewSet, AccountView, CommentListView, CommentDetailView
 
 router = SimpleRouter()
 router.register("group", GroupViewSet, base_name='group')
@@ -37,14 +37,14 @@ urlpatterns = [
     path('account/register/', UserRegister.as_view()),
 
     path('user/', UserListView.as_view()),
-
-    # path('group/', GroupListView.as_view()),
-    # path('group/<int:pk>/', GroupDetailView.as_view()),
     
     path('group/<int:gid>/member/', MemberListView.as_view()),
     path('group/<int:gid>/member/<int:mid>/', MemberDeleteView.as_view()),
     
     path('account/', AccountView.as_view()),
+
+    path('activity/<int:aid>/comment/', CommentListView.as_view()),
+    path('activity/<int:aid>/comment/<int:pk>/', CommentDetailView.as_view()),
 ]
 
 urlpatterns += router.urls

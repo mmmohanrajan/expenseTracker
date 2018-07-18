@@ -89,6 +89,13 @@ class Activity(models.Model):
         ordering = ('created_on',)
 
 
+class Comment(models.Model):
+    activity = models.ForeignKey(Activity, blank=True, on_delete=models.CASCADE, related_name='cmt_activity')
+    content = models.TextField(max_length=150)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cmt_createdby')
+    created_on = models.DateTimeField(auto_now_add=True)
+
+
 class Account(models.Model):
     '''
     '''
